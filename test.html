@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>心理学理论流派谱系测试 · 开始测试</title>
+  <meta name="description" content="24题谱系型测试：理解路径雷达图 + 派别解释 + 百科。" />
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="./index.html" aria-label="返回首页">
+        <span class="logo-dot" aria-hidden="true"></span>
+        <span class="brand-title">心理学理论流派谱系测试</span>
+      </a>
+      <nav class="nav">
+        <button class="nav-chip" data-tab="test" id="tabBtnTest">开始测试</button>
+        <button class="nav-chip" data-tab="result" id="tabBtnResult">查看结果</button>
+        <button class="nav-chip" data-tab="encyclopedia" id="tabBtnEncy">派别百科</button>
+        <button class="nav-chip" data-tab="about" id="tabBtnAbout">说明</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="panel-test" class="panel">
+      <div class="card">
+        <div class="panel-head">
+          <div>
+            <h1 class="h1">开始测试</h1>
+            <p class="muted">选择更接近你的那一侧，再用 7 点刻度表示偏向程度（越靠右越偏右侧）。</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" id="btnReset">清空作答</button>
+          </div>
+        </div>
+        <div class="progress">
+          <div class="progress-bar" id="progressBar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div id="questionWrap" class="card question-card" aria-live="polite">
+        <div class="q-meta">
+          <span class="q-count" id="qCount">第 1 / 24 题</span>
+          <span class="q-tag" id="qTag">解释倾向</span>
+        </div>
+        <h2 class="q-title" id="qTitle">题目加载中…</h2>
+
+        <div class="choice-grid" role="group" aria-label="倾向选择">
+          <div class="choice choice-left" id="choiceLeft">
+            <div class="choice-label">左侧</div>
+            <div class="choice-text" id="choiceLeftText">—</div>
+          </div>
+
+          <div class="scale" aria-label="7 点刻度">
+            <div class="scale-row" id="scaleRow"></div>
+            <div class="scale-hint muted">
+              <span>更偏左</span><span>更偏右</span>
+            </div>
+          </div>
+
+          <div class="choice choice-right" id="choiceRight">
+            <div class="choice-label">右侧</div>
+            <div class="choice-text" id="choiceRightText">—</div>
+          </div>
+        </div>
+
+        <div class="q-foot">
+          <button class="btn" id="btnPrev">上一题</button>
+          <div class="muted" id="autosaveHint">已自动保存</div>
+          <button class="btn primary" id="btnNext">下一题</button>
+        </div>
+      </div>
+
+      <div class="card" id="finishCard" style="display:none">
+        <h2 class="h2">已完成</h2>
+        <p class="muted">你可以查看结果，或继续在百科里对照理解各派别。</p>
+        <div class="cta-row">
+          <button class="btn primary" id="btnGoResult">查看结果</button>
+          <button class="btn" id="btnGoEncy">派别百科</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="panel-result" class="panel" style="display:none">
+      <div class="card">
+        <div class="panel-head">
+          <div>
+            <h1 class="h1">你的结果</h1>
+            <p class="muted">主结果为唯一派别；当第二派别接近时，会显示混合倾向。</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" id="btnRecalc">重新计算</button>
+            <button class="btn" id="btnShare">复制结果摘要</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card result-card">
+        <div class="result-header">
+          <div>
+            <div class="result-badge" id="resultBadge">主派别</div>
+            <h2 class="result-title" id="resultTitle">—</h2>
+            <p class="result-sub muted" id="resultOneLiner">—</p>
+            <div class="tag-row" id="resultTags"></div>
+          </div>
+          <div class="mini">
+            <canvas id="radar" width="320" height="260" aria-label="理解路径雷达图"></canvas>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="grid-2">
+          <div>
+            <h3 class="h3">你的理解路径（人话版）</h3>
+            <div class="muted" id="pathText">—</div>
+          </div>
+          <div>
+            <h3 class="h3">混合型提示</h3>
+            <div class="muted" id="mixText">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="resultModules"></div>
+    </section>
+
+    <section id="panel-encyclopedia" class="panel" style="display:none">
+      <div class="card">
+        <div class="panel-head">
+          <div>
+            <h1 class="h1" id="encyTitle">派别百科</h1>
+            <p class="muted">先看总览卡片；点击后一次只展开一个派别，避免信息堆叠。</p>
+          </div>
+          <div class="panel-actions">
+            <button class="btn" id="btnBackToList" style="display:none">返回列表</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="encyList" class="ency-list"></div>
+      <div id="encyDetail" style="display:none"></div>
+    </section>
+
+    <section id="panel-about" class="panel" style="display:none">
+      <div class="card">
+        <h1 class="h1">说明</h1>
+        <div class="grid-2">
+          <div>
+            <h3 class="h3">这是什么类型的测试</h3>
+            <p class="muted">这是谱系型测试：观察你更常用的理解路径，并映射到心理学理论流派。它不评价对错，也不输出“你是什么样的人”。</p>
+          </div>
+          <div>
+            <h3 class="h3">计分方式</h3>
+            <p class="muted">结果由 5 条理解轴（24 题中的 20 题）与 4 道校准题共同决定。主派别唯一；当相近时显示次派别提示。</p>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <h3 class="h3">隐私</h3>
+        <p class="muted">所有作答只保存在你的浏览器本地存储中，不上传服务器。</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p class="muted">© 谱系型测试 · 移动端优先 · 纯静态 JSON 驱动</p>
+    </footer>
+  </main>
+
+  <script src="./assets/test.js"></script>
+</body>
+</html>
